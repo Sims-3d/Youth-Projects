@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalogue des Projets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 1rem;
+      color: #333;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      border-left: 6px solid #007BFF;
+    }
+    .card img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 15px;
+    }
+    .description {
+      max-height: 4.5em;
+      overflow: hidden;
+      position: relative;
+    }
+    .description.expand {
+      max-height: none;
+    }
+    .toggle-btn {
+      color: #007BFF;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .stats {
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+    .btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .btns a {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      background-color: #28a745;
+      color: white;
+      text-decoration: none;
+    }
+    .btns a:nth-child(2) {
+      background-color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+
+<div id="projects"></div>
+
+<script>
+  fetch("https://script.google.com/macros/s/AKfycbwcP-C5UMr_m0U6RON0Qv5lerc9g49eiff5fgV6jaGs1m5OnKDD4SVwwqAUr8fm6K25/exec")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("projects");
+      data.forEach(project => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <img src="${project.ImageURL}" alt="Image du projet">
+          <div class="card-content">
+            <h3>${project.Titre}</h3>
+            <div class="description" id="desc-${project.Titre.replace(/\s/g, '')}">
+              ${project.Description}
+            </div>
+            <button class="toggle-btn" onclick="toggleDesc('desc-${project.Titre.replace(/\s/g, '')}', this)">Voir plus</button>
+            <div class="stats">
+              Financement: ${project.MontantReuni} / ${project.MontantTotal} FCFA<br>
+              Investisseurs: ${project.NombreActuelInvestisseurs} / ${project.NombreMaxInvestisseurs}
+            </div>
+            <div class="btns">
+              <a href="${project.LienFormulaire}" target="_blank">Investir</a>
+              <a href="${project.LienDocuments}" download>Télécharger Docs</a>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    });
+
+  function toggleDesc(id, btn) {
+    const el = document.getElementById(id);
+    el.classList.toggle("expand");
+    btn.textContent = el.classList.contains("expand") ? "Voir moins" : "Voir plus";
+  }
+</script>
+
+</body>
+</html>
