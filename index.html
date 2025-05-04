@@ -1,76 +1,397 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Catalogue des Projets</title>
+  <title>Youth Projects</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 1rem;
+      padding: 0;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f4f9;
       color: #333;
+      padding: 0px 25px;
     }
-    .card {
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      overflow: hidden;
-      border-left: 6px solid #007BFF;
+    h2 {
+      color: #28a745;
+      margin-bottom: 10px;
     }
-    .card img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
     }
-    .card-content {
-      padding: 15px;
+    .section {
+      padding: 20px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .text-content, .image-content {
+      flex: 1 1 300px;
+      min-width: 250px;
+      padding: 10px;
+    }
+    .image-content img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+    .button-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    .btn.active {
+      background-color: #28a745;
     }
     .description {
-      max-height: 4.5em;
-      overflow: hidden;
-      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: opacity 0.5s ease;
     }
-    .description.expand {
-      max-height: none;
-    }
-    .toggle-btn {
-      color: #007BFF;
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-    }
-    .stats {
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-    .btns {
-      display: flex;
-      gap: 10px;
+    .description img {
+      max-width: 100%;
+      border-radius: 8px;
       margin-top: 15px;
     }
-    .btns a {
-      flex: 1;
+    .go {
+      background-color: red;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      display: inline-block;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+    .main-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+    .mini-card {
+      flex: 0 0 260px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      scroll-snap-align: start;
+      transition: transform 0.3s;
+    }
+    .mini-card:hover {
+      transform: scale(1.03);
+    }
+    .mini-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .mini-card-content {
+      padding: 15px;
+    }
+    .btn-action {
+      display: block;
       text-align: center;
+      background: #28a745;
+      color: white;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+    .see-all {
+      text-align: right;
+      margin-top: 10px;
+    }
+    .see-all a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .cards {
+      display: flex;
+      justify-content: space-around;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      flex: 1;
+      min-width: 280px;
+      transition: transform 0.3s;
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+    }
+    .card:nth-child(even) { animation-delay: 0.5s; }
+    .card:hover { transform: translateY(-10px); }
+    .card h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .card a {
+      display: inline-block;
+      padding: 10px 20px;
       background-color: #28a745;
       color: white;
+      border-radius: 5px;
       text-decoration: none;
+      text-align: center;
     }
-    .btns a:nth-child(2) {
+    .card a:hover { background-color: #218838; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section-title {
+      font-size: 1.6rem;
+      color: #007BFF;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    @media (max-width: 768px) {
+      .cards { flex-direction: column; align-items: center; }
+    }
+
+    section {
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .form-container {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 100%;
+      
+    }
+    input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form{
+      width: 100%;
+    }
+    .buttonform {
+      width: 100%;
+      padding: 10px;
       background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .buttonform:hover {
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
 
-<div id="projects"></div>
+  <!-- SECTION 1 : Bienvenue -->
+  <div class="section flex-row">
+    <div class="text-content">
+      <h2>Bienvenue sur Youth Projects</h2>
+      <p>Rejoignez notre communauté d'investisseurs et participez à l'essor de projets exceptionnels.</p>
+    </div>
+    <div class="image-content">
+      <img src="https://i.imgur.com/VsbaY0Q.jpeg" alt="Illustration investissement">
+    </div>
+  </div>
 
-<footer style="background-color: #f1f1f1; color: #000; padding: 20px 10px; text-align: center; font-size: 14px; width: 100%; overflow: hidden;">
+  <hr>
+
+  <!-- SECTION 2 : Qui Sommes-Nous -->
+  <div class="section">
+    <h2>Qui Sommes-Nous ?</h2>
+    <p>Youth Projects est une plateforme innovante dédiée à la présentation de projets prometteurs et à la facilitation de leur financement par les investisseurs.</p>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 3 : Boutons dynamiques -->
+  <div class="section">
+    <div class="button-container">
+      <button id="btn1" class="btn active">Investissement Projet</button>
+      <button id="btn2" class="btn">Présentation Projet</button>
+    </div>
+    <div id="description" class="description">
+      <h2 id="title">Investissement Projet</h2>
+      <p id="text">Découvrez des opportunités d'investissements stables et rentables pour assurer votre avenir financier.</p>
+      <img id="image" src="https://imgur.com/cNmHuXe.png" alt="Investissement Projet">
+      <a id="goButton" class="go" href="https://sites.google.com/view/youthprojectsnetwork/catalogue-des-projets">Go</a>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 4 : Projets phares -->
+  <div class="section main-card">
+    <h2>Nos Projets Phares</h2>
+    <div class="carousel" id="carousel">
+      <div class="mini-card">
+        <img src="https://images.unsplash.com/photo-1581093588401-12d5b99c82e4" alt="Projet 1">
+        <div class="mini-card-content">
+          <h3>École Verte</h3>
+          <p>Construire une école écologique et durable pour les enfants défavorisés.</p>
+          <p>Objectif: 10 000 XAF</p>
+          <p>Collecte: 3 500 XAF</p>
+          <a href="#" class="btn-action">En savoir plus</a>
+        </div>
+      </div>
+      <div class="mini-card">
+        <img src="https://images.unsplash.com/photo-1522199755839-a2bacb67c546" alt="Projet 2">
+        <div class="mini-card-content">
+          <h3>Ferme Solaire</h3>
+          <p>Installer des panneaux solaires pour alimenter une ferme communautaire.</p>
+          <p>Objectif: 20 000 XAF</p>
+          <p>Collecte: 8 200 XAF</p>
+          <a href="#" class="btn-action">En savoir plus</a>
+        </div>
+      </div>
+      <div class="mini-card">
+        <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6" alt="Projet 3">
+        <div class="mini-card-content">
+          <h3>Puiseurs d'Eau</h3>
+          <p>Fournir des puits d’eau potable aux villages reculés.</p>
+          <p>Objectif: 15 000 XAF</p>
+          <p>Collecte: 5 600 XAF</p>
+          <a href="#" class="btn-action">En savoir plus</a>
+        </div>
+      </div>
+    </div>
+    <div class="see-all">
+      <a href="https://sites.google.com/view/youthprojectsnetwork/catalogue-des-projets">Voir tous les projets →</a>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 5 : Comment ça marche -->
+  <div class="section">
+    <h2>Comment ça marche ?</h2>
+
+    <div class="section-title">Pour les porteurs de projet :</div>
+    <div class="cards">
+      <div class="card">
+        <h3>1. Inscription</h3>
+        <p>Soumettez votre proposition via notre formulaire en ligne, accompagnée d'un business plan détaillé et des documents pertinents.</p>
+        <a href="#">Commencez maintenant</a>
+      </div>
+      <div class="card">
+        <h3>2. Évaluation</h3>
+        <p>Votre projet sera évalué selon sa faisabilité, son potentiel de revenus, sa localisation et le type d'activité.</p>
+        <a href="#">Plus d'infos</a>
+      </div>
+      <div class="card">
+        <h3>3. Sélection</h3>
+        <p>Les projets retenus seront présentés sur Youth Projects pour attirer des investisseurs.</p>
+        <a href="#">En savoir plus</a>
+      </div>
+    </div>
+
+    <div class="section-title">Pour les investisseurs :</div>
+    <div class="cards">
+      <div class="card">
+        <h3>1. Découvrez les projets</h3>
+        <p>Explorez les projets sélectionnés sur notre plateforme et choisissez ceux qui vous intéressent.</p>
+        <a href="#">Voir les projets</a>
+      </div>
+      <div class="card">
+        <h3>2. Contactez les porteurs de projets</h3>
+        <p>Contactez directement les porteurs de projets pour plus d'informations et pour exprimer votre intérêt.</p>
+        <a href="#">Contactez-nous</a>
+      </div>
+      <div class="card">
+        <h3>3. Financement et accompagnement</h3>
+        <p>Youth Projects facilite le processus de financement et offre un accompagnement continu pour assurer le succès.</p>
+        <a href="#">Démarrer</a>
+      </div>
+    </div>
+  </div>
+
+  
+<div class="form-container">
+  <h2>Nous Contacter</h2>
+  <form id="projectForm">
+    <input type="text" id="name" placeholder="Nom et Prénom" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <textarea id="description" placeholder="Commentaire" required></textarea><br>
+    <button class = "buttonform" type="submit">Soumettre</button>
+  </form>
+  <p id="responseMessage"></p>
+</div>
+
+<footer style="margin-top: 40px; background-color: #f1f1f1; color: #000; padding: 20px 10px; text-align: center; font-size: 14px; width: 100%; overflow: hidden;">
   <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
     <div style="flex: 1 1 100%; text-align: center; margin-bottom: 10px;">
       © 2025 Youth Project
@@ -83,47 +404,87 @@
   </div>
 </footer>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("https://script.google.com/macros/s/AKfycbxqD5jMxwCqSbNzIWwO259EkApk-gGzEYa3rVGJGAXKQ2e7UgEort53hwfAj9_cfnSH/exec")
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("projects");
-        data.forEach(project => {
-          const card = document.createElement("div");
-          card.className = "card";
 
-          const descId = "desc-" + project.Titre.replace(/\s/g, '');
+  <script>
+    const btn1 = document.getElementById('btn1');
+  const btn2 = document.getElementById('btn2');
+  const title = document.getElementById('title');
+  const text = document.getElementById('text');
+  const image = document.getElementById('image');
+  const goButton = document.getElementById('goButton');
+  const description = document.getElementById('description');
 
-          card.innerHTML = `
-            <img src="${project.ImageURL}" alt="Image du projet">
-            <div class="card-content">
-              <h3>${project.Titre}</h3>
-              <div class="description" id="${descId}">
-                ${project.Description}
-              </div>
-              <button class="toggle-btn" onclick="toggleDesc('${descId}', this)">Voir plus</button>
-              <div class="stats">
-                Financement: ${project.MontantReuni} / ${project.MontantTotal} FCFA<br>
-                Investisseurs: ${project.NombreActuelInvestisseurs} / ${project.NombreMaxInvestisseurs}
-              </div>
-              <div class="btns">
-                <a href="${project.LienFormulaire}" target="_blank">Investir</a>
-                <a href="${project.LienDocuments}" download>Télécharger Docs</a>
-              </div>
-            </div>
-          `;
-          container.appendChild(card);
-        });
-      });
+  function changeContent(newTitle, newText, newImgSrc, newImgAlt, newLink) {
+    description.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = newTitle;
+      text.textContent = newText;
+      image.src = newImgSrc;
+      image.alt = newImgAlt;
+      goButton.href = newLink;
+      description.style.opacity = 1;
+    }, 300);
+  }
 
-    window.toggleDesc = function (id, btn) {
-      const el = document.getElementById(id);
-      el.classList.toggle("expand");
-      btn.textContent = el.classList.contains("expand") ? "Voir moins" : "Voir plus";
-    };
+  btn1.addEventListener('click', () => {
+    btn1.classList.add('active');
+    btn2.classList.remove('active');
+    changeContent(
+      "Investissement Projet",
+      "Découvrez des opportunités d'investissements stables et rentables pour assurer votre avenir financier.",
+      "https://imgur.com/cNmHuXe.png",
+      "Investissement Projet",
+      "https://sites.google.com/view/youthprojectsnetwork/catalogue-des-projets"
+    );
   });
-</script>
+
+  btn2.addEventListener('click', () => {
+    btn2.classList.add('active');
+    btn1.classList.remove('active');
+    changeContent(
+      "Présentation Projet",
+      "Soumettez votre projet innovant et bénéficiez d'un accompagnement personnalisé et d'une visibilité auprès des investisseurs.",
+      "https://imgur.com/1HTLu41.png",
+      "Présentation Projet",
+      "https://sites.google.com/view/youthprojectsnetwork/formulaire-de-soumission"
+    );
+  });
+    // Auto-scroll carousel
+    const carousel = document.getElementById('carousel');
+    let scrollInterval = setInterval(() => {
+      carousel.scrollBy({ left: 280, behavior: 'smooth' });
+    }, 3000);
+    carousel.addEventListener('scroll', () => {
+      if (carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth - 1) {
+        setTimeout(() => { carousel.scrollTo({ left: 0, behavior: 'smooth' }); }, 3000);
+      }
+    });
+
+     document.getElementById('projectForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const data = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      description: document.getElementById('description').value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbxGS06JbMJr6bifLyw1JYh0AdCInC9xX2c8jfIds3MqHvSKHEeFV62a5qMjVezGQKT0/exec", {
+      method: "POST",
+      mode: "no-cors", // Google Apps Script ne répond pas avec des headers CORS
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    }).then(() => {
+      document.getElementById('responseMessage').textContent = "Merci ! Votre message a été envoyé.";
+      document.getElementById('projectForm').reset();
+    }).catch(() => {
+      document.getElementById('responseMessage').textContent = "Erreur lors de l’envoi.";
+    });
+
+    
+  </script>
 
 </body>
 </html>
