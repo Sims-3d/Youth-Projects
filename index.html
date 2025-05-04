@@ -1,46 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Catalogue des Projets</title>
-  <script defer>
-  fetch("https://script.google.com/macros/s/AKfycbxqD5jMxwCqSbNzIWwO259EkApk-gGzEYa3rVGJGAXKQ2e7UgEort53hwfAj9_cfnSH/exec")
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("projects");
-      data.forEach(project => {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        card.innerHTML = `
-          <img src="${project.ImageURL}" alt="Image du projet">
-          <div class="card-content">
-            <h3>${project.Titre}</h3>
-            <div class="description" id="desc-${project.Titre.replace(/\s/g, '')}">
-              ${project.Description}
-            </div>
-            <button class="toggle-btn" onclick="toggleDesc('desc-${project.Titre.replace(/\s/g, '')}', this)">Voir plus</button>
-            <div class="stats">
-              Financement: ${project.MontantReuni} / ${project.MontantTotal} FCFA<br>
-              Investisseurs: ${project.NombreActuelInvestisseurs} / ${project.NombreMaxInvestisseurs}
-            </div>
-            <div class="btns">
-              <a href="${project.LienFormulaire}" target="_blank">Investir</a>
-              <a href="${project.LienDocuments}" download>Télécharger Docs</a>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    });
-
-  function toggleDesc(id, btn) {
-    const el = document.getElementById(id);
-    el.classList.toggle("expand");
-    btn.textContent = el.classList.contains("expand") ? "Voir moins" : "Voir plus";
-  }
-</script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -118,6 +82,48 @@
     </div>
   </div>
 </footer>
-  
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("https://script.google.com/macros/s/AKfycbxqD5jMxwCqSbNzIWwO259EkApk-gGzEYa3rVGJGAXKQ2e7UgEort53hwfAj9_cfnSH/exec")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("projects");
+        data.forEach(project => {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const descId = "desc-" + project.Titre.replace(/\s/g, '');
+
+          card.innerHTML = `
+            <img src="${project.ImageURL}" alt="Image du projet">
+            <div class="card-content">
+              <h3>${project.Titre}</h3>
+              <div class="description" id="${descId}">
+                ${project.Description}
+              </div>
+              <button class="toggle-btn" onclick="toggleDesc('${descId}', this)">Voir plus</button>
+              <div class="stats">
+                Financement: ${project.MontantReuni} / ${project.MontantTotal} FCFA<br>
+                Investisseurs: ${project.NombreActuelInvestisseurs} / ${project.NombreMaxInvestisseurs}
+              </div>
+              <div class="btns">
+                <a href="${project.LienFormulaire}" target="_blank">Investir</a>
+                <a href="${project.LienDocuments}" download>Télécharger Docs</a>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+    window.toggleDesc = function (id, btn) {
+      const el = document.getElementById(id);
+      el.classList.toggle("expand");
+      btn.textContent = el.classList.contains("expand") ? "Voir moins" : "Voir plus";
+    };
+  });
+</script>
+
 </body>
 </html>
